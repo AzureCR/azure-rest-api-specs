@@ -4,12 +4,12 @@
     "version": "2016-06-27-preview",
     "title": "ContainerRegistry"
   },
-  "host": "krater-rp-dogfood.azurewebsites.net",
+  "host": "https://management.azure.com",
   "schemes": [
     "http"
   ],
   "paths": {
-    "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroup}/providers/Microsoft.Krater/registries/{registryName}": {
+    "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroup}/providers/Microsoft.ContainerRegistry/registries/{registryName}": {
       "get": {
         "tags": [
           "Registries"
@@ -193,7 +193,7 @@
         "deprecated": false
       }
     },
-    "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroup}/providers/Microsoft.Krater/registries": {
+    "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroup}/providers/Microsoft.ContainerRegistry/registries": {
       "get": {
         "tags": [
           "Registries"
@@ -229,7 +229,7 @@
         "deprecated": false
       }
     },
-    "/subscriptions/{subscriptionId}/providers/Microsoft.Krater/registries": {
+    "/subscriptions/{subscriptionId}/providers/Microsoft.ContainerRegistry/registries": {
       "get": {
         "tags": [
           "Registries"
@@ -291,6 +291,9 @@
     "RegistryProperties": {
       "type": "object",
       "properties": {
+        "storageAccount": {
+          "$ref": "#/definitions/StorageAccountProperties"
+        },
         "loginServer": {
           "type": "string"
         },
@@ -302,6 +305,23 @@
         },
         "creationDate": {
           "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "StorageAccountProperties": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "accessKey": {
+          "type": "string"
+        },
+        "endPointUrl": {
+          "type": "string"
+        },
+        "endpointSuffix": {
           "type": "string"
         }
       }
