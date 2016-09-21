@@ -4,11 +4,55 @@
     "version": "2016-06-27-preview",
     "title": "ContainerRegistry"
   },
-  "host": "https://management.azure.com",
+  "host": "management.azure.com",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
+    "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroup}/moveResources": {
+      "post": {
+        "tags": [
+          "Operation"
+        ],
+        "operationId": "Operation_MoveResources",
+        "consumes": [
+          "application/json",
+         "text/json"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionIdParameter"
+          },
+          {
+            "name": "resourceGroup",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "moveRequest",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegistryMoveRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "deprecated": false
+      }
+    },
     "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroup}/providers/Microsoft.ContainerRegistry/registries/{registryName}": {
       "get": {
         "tags": [
@@ -44,7 +88,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/RegistryParameters"
+              "$ref": "#/definitions/Registry"
             }
           }
         },
@@ -87,15 +131,15 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/RegistryParameters"
+              "$ref": "#/definitions/RegistryCreateParameters"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Object"
+           "schema": {
+              "$ref": "#/definitions/RegistryCreateParameters"
             }
           }
         },
@@ -133,10 +177,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Object"
-            }
+            "description": "OK"
           }
         },
         "deprecated": false
@@ -174,11 +215,11 @@
             "type": "string"
           },
           {
-            "name": "registryParameters",
+            "name": "registryUpdateParameters",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/RegistryParameters"
+              "$ref": "#/definitions/RegistryUpdateParameters"
             }
           }
         ],
@@ -186,7 +227,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Object"
+              "$ref": "#/definitions/Registry"
             }
           }
         },
@@ -222,7 +263,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ResourceList[RegistryParameters]"
+              "$ref": "#/definitions/ResourceList[Registry]"
             }
           }
         },
@@ -252,7 +293,48 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/ResourceList[RegistryParameters]"
+              "$ref": "#/definitions/ResourceList[Registry]"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/subscriptions/{subscriptionId}": {
+      "put": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "operationId": "Subscriptions_PutSubscription",
+        "consumes": [
+          "application/json",
+          "text/json"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionIdParameter"
+          },
+          {
+            "name": "notification",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SubscriptionNotification"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SubscriptionNotification"
             }
           }
         },
@@ -261,7 +343,21 @@
     }
   },
   "definitions": {
-    "RegistryParameters": {
+    "RegistryMoveRequest": {
+      "type": "object",
+      "properties": {
+        "targetResourceGroup": {
+          "type": "string"
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Registry": {
       "type": "object",
       "properties": {
         "id": {
@@ -292,15 +388,12 @@
       "type": "object",
       "properties": {
         "storageAccount": {
-          "$ref": "#/definitions/StorageAccountProperties"
+          "$ref": "#/definitions/StorageAccountBaseProperties"
         },
         "loginServer": {
           "type": "string"
         },
         "username": {
-          "type": "string"
-        },
-        "key": {
           "type": "string"
         },
         "creationDate": {
@@ -309,35 +402,122 @@
         }
       }
     },
-    "StorageAccountProperties": {
+    "StorageAccountBaseProperties": {
       "type": "object",
       "properties": {
+       "name": {
+          "type": "string"
+        }
+      }
+    },
+    "RegistryCreateParameters": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
         "name": {
           "type": "string"
         },
+        "location": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string",
+          "readOnly": true
+        },
+        "properties": {
+          "$ref": "#/definitions/RegistryPropertiesCreateParameters"
+        }
+      }
+    },
+    "RegistryPropertiesCreateParameters": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string"
+        },
+        "storageAccount": {
+          "$ref": "#/definitions/StorageAccountProperties"
+        }
+      }
+    },
+    "StorageAccountProperties": {
+      "type": "object",
+      "properties": {
         "accessKey": {
           "type": "string"
         },
         "endPointUrl": {
           "type": "string"
         },
-        "endpointSuffix": {
+        "name": {
           "type": "string"
         }
       }
     },
-    "Object": {
+    "RegistryUpdateParameters": {
       "type": "object",
-      "properties": {}
+      "properties": {
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
     },
-    "ResourceList[RegistryParameters]": {
+    "ResourceList[Registry]": {
       "type": "object",
       "properties": {
         "value": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/RegistryParameters"
+            "$ref": "#/definitions/Registry"
           }
+        }
+      }
+    },
+    "SubscriptionNotification": {
+      "type": "object",
+      "properties": {
+        "registrationDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "NotDefined",
+            "Registered",
+            "Unregistered",
+            "Warned",
+            "Suspended",
+            "Deleted"
+          ],
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/definitions/SubscriptionProperties"
+        }
+      }
+    },
+    "SubscriptionProperties": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string"
+        },
+        "locationPlacementId": {
+          "type": "string"
+        },
+        "quotaId": {
+          "type": "string"
         }
       }
     }
