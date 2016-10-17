@@ -152,7 +152,7 @@
         "tags": [
           "Registries"
         ],
-        "description": "Deletes a container registry in Microsoft Azure.",
+        "description": "Deletes a container registry from the given subscription and resource group.",
         "operationId": "Registries_Delete",
         "consumes": [
           "application/json"
@@ -325,7 +325,7 @@
         "tags": [
           "Registries"
         ],
-        "description": "Gets admin username and password for the specified container registry.",
+        "description": "Gets login credentials for the specified container registry.",
         "operationId": "Registries_GetCredentials",
         "consumes": [
           "application/json"
@@ -390,45 +390,29 @@
       "properties": {
         "nameAvailable": {
           "description": "The boolean value that indicates whether the name is available.",
-          "type": "boolean"
+          "type": "boolean",
+          "readOnly": true
         },
         "reason": {
           "description": "The reason that the container registry name could not be used.",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "message": {
           "description": "The error message that explains the reason value in more detail.",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         }
       }
     },
     "Registry": {
       "description": "The container registry.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        }
+      ],
       "properties": {
-        "type": {
-          "description": "The container registry resource type.",
-          "type": "string",
-          "readOnly": true
-        },
-        "id": {
-          "description": "Resource Id.",
-          "type": "string"
-        },
-        "name": {
-          "description": "Resource name.",
-          "type": "string"
-        },
-        "location": {
-          "description": "Resource location.",
-          "type": "string"
-        },
-        "tags": {
-          "description": "Resource tags.",
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
         "properties": {
           "$ref": "#/definitions/RegistryProperties",
           "description": "The container registry properties.",
@@ -441,30 +425,33 @@
       "properties": {
         "loginServer": {
           "description": "The URL to log into the container registry.",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "creationDate": {
           "format": "date-time",
           "description": "The creation date of the container registry in ISO8601 format.",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "adminUserEnabled": {
           "description": "The boolean value that indicates whether admin user is enabled.",
-          "type": "boolean"
+          "type": "boolean",
+          "readOnly": true
         },
         "storageAccount": {
-          "$ref": "#/definitions/StorageAccountBaseProperties",
-          "description": "The storage account base properties.",
-          "x-ms-client-flatten": true
+          "$ref": "#/definitions/StorageAccountBase",
+          "description": "The storage account base properties."
         }
       }
     },
-    "StorageAccountBaseProperties": {
+    "StorageAccountBase": {
       "description": "The storage account base properties.",
       "properties": {
         "name": {
           "description": "Storage account name.",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         }
       }
     },
@@ -475,21 +462,8 @@
         "properties"
       ],
       "properties": {
-        "type": {
-          "description": "The container registry resource type.",
-          "type": "string",
-          "readOnly": true
-        },
         "location": {
           "description": "Resource location.",
-          "type": "string"
-        },
-        "id": {
-          "description": "Resource Id.",
-          "type": "string"
-        },
-        "name": {
-          "description": "Resource name.",
           "type": "string"
         },
         "tags": {
@@ -523,8 +497,7 @@
         },
         "storageAccount": {
           "$ref": "#/definitions/StorageAccountProperties",
-          "description": "The storage account properties.",
-          "x-ms-client-flatten": true
+          "description": "The storage account properties."
         }
       }
     },
@@ -533,8 +506,7 @@
       "required": [
         "name",
         "accessKey",
-        "endPointUrl",
-        "location"
+        "endPointUrl"
       ],
       "properties": {
         "name": {
@@ -554,6 +526,39 @@
           "type": "string"
         }
       }
+    },
+    "Resource": {
+      "description": "Azure resource.",
+      "properties": {
+        "id": {
+          "description": "Resource Id.",
+          "type": "string",
+          "readOnly": true
+        },
+        "name": {
+          "description": "Resource name.",
+          "type": "string",
+          "readOnly": true
+        },
+        "type": {
+          "description": "Resource type.",
+          "type": "string",
+          "readOnly": true
+        },
+        "location": {
+          "description": "Resource location.",
+          "type": "string",
+          "readOnly": true
+        },
+        "tags": {
+          "description": "Resource tags.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "x-ms-azure-resource": true
     },
     "RegistryUpdateParameters": {
       "description": "The parameters for updating a container registry.",
@@ -579,14 +584,13 @@
           "description": "The tenant id for the current user.",
           "type": "string"
         },
-        "storageAccount": {
-          "$ref": "#/definitions/StorageAccountProperties",
-          "description": "The storage account properties.",
-          "x-ms-client-flatten": true
-        },
         "adminUserEnabled": {
           "description": "The boolean value that indicates whether admin user is enabled.",
           "type": "boolean"
+        },
+        "storageAccount": {
+          "$ref": "#/definitions/StorageAccountProperties",
+          "description": "The storage account properties."
         }
       }
     },
@@ -597,7 +601,8 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/Registry"
-          }
+          },
+          "readOnly": true
         }
       }
     },
@@ -606,11 +611,13 @@
       "properties": {
         "username": {
           "description": "Admin username.",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         },
         "password": {
           "description": "Admin password.",
-          "type": "string"
+          "type": "string",
+          "readOnly": true
         }
       }
     }
