@@ -441,7 +441,8 @@
         },
         "storageAccount": {
           "$ref": "#/definitions/StorageAccountBase",
-          "description": "The storage account base properties."
+          "description": "The storage account base properties.",
+          "readOnly": true
         }
       }
     },
