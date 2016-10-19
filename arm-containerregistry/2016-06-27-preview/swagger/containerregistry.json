@@ -8,6 +8,12 @@
   "schemes": [
     "https"
   ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
     "/subscriptions/{subscriptionId}/providers/Microsoft.ContainerRegistry/checkNameAvailability": {
       "post": {
@@ -16,12 +22,6 @@
         ],
         "description": "Checks whether the container registry name is available.",
         "operationId": "Operation_CheckNameAvailability",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -55,14 +55,8 @@
         "tags": [
           "Registries"
         ],
-        "description": "Returns the properties for the specified container registry.",
+        "description": "Gets the properties for the specified container registry.",
         "operationId": "Registries_GetProperties",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -100,13 +94,7 @@
           "Registries"
         ],
         "description": "Creates a new container registry with the specified parameters.",
-        "operationId": "Registries_Create",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "operationId": "Registries_CreateOrUpdate",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -129,12 +117,12 @@
             "type": "string"
           },
           {
-            "name": "registryCreateParameters",
+            "name": "registry",
             "in": "body",
-            "description": "The parameters for creating a container registry.",
+            "description": "The container registry.",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/RegistryCreateParameters"
+              "$ref": "#/definitions/Registry"
             }
           }
         ],
@@ -154,12 +142,6 @@
         ],
         "description": "Deletes a container registry from the given subscription and resource group.",
         "operationId": "Registries_Delete",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -195,12 +177,6 @@
         ],
         "description": "Updates a container registry with the specified parameters.",
         "operationId": "Registries_Update",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -250,12 +226,6 @@
         ],
         "description": "Lists all the container registries available under the given resource group.",
         "operationId": "Registries_ListByResourceGroup",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -292,12 +262,6 @@
         ],
         "description": "Lists all the container registries available under the subscription.",
         "operationId": "Registries_List",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -327,12 +291,6 @@
         ],
         "description": "Gets login credentials for the specified container registry.",
         "operationId": "Registries_GetCredentials",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -381,6 +339,9 @@
         },
         "type": {
           "description": "The container registry resource type.",
+          "enum": [
+            "Microsoft.ContainerRegistry/registries"
+          ],
           "type": "string"
         }
       }
@@ -422,7 +383,15 @@
     },
     "RegistryProperties": {
       "description": "The container registry properties.",
+      "required": [
+        "tenantId",
+        "storageAccount"
+      ],
       "properties": {
+        "tenantId": {
+          "description": "The tenant id for the current user.",
+          "type": "string"
+        },
         "loginServer": {
           "description": "The URL to log into the container registry.",
           "type": "string",
@@ -435,65 +404,7 @@
           "readOnly": true
         },
         "adminUserEnabled": {
-          "description": "The boolean value that indicates whether admin user is enabled.",
-          "type": "boolean",
-          "readOnly": true
-        },
-        "storageAccount": {
-          "$ref": "#/definitions/StorageAccountBase",
-          "description": "The storage account base properties.",
-          "readOnly": true
-        }
-      }
-    },
-    "StorageAccountBase": {
-      "description": "The storage account base properties.",
-      "properties": {
-        "name": {
-          "description": "Storage account name.",
-          "type": "string",
-          "readOnly": true
-        }
-      }
-    },
-    "RegistryCreateParameters": {
-      "description": "The parameters for creating a container registry.",
-      "required": [
-        "location",
-        "properties"
-      ],
-      "properties": {
-        "location": {
-          "description": "Resource location.",
-          "type": "string"
-        },
-        "tags": {
-          "description": "Resource tags.",
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          }
-        },
-        "properties": {
-          "$ref": "#/definitions/RegistryPropertiesCreateParameters",
-          "description": "The parameters for creating container registry properties.",
-          "x-ms-client-flatten": true
-        }
-      }
-    },
-    "RegistryPropertiesCreateParameters": {
-      "description": "The parameters for creating container registry properties.",
-      "required": [
-        "tenantId",
-        "storageAccount"
-      ],
-      "properties": {
-        "tenantId": {
-          "description": "The tenant id for the current user.",
-          "type": "string"
-        },
-        "adminUserEnabled": {
-          "description": "The boolean value that indicates whether admin user is enabled.",
+          "description": "The boolean value that indicates whether admin user is enabled. Default value is false.",
           "type": "boolean"
         },
         "storageAccount": {
@@ -521,15 +432,14 @@
         "endPointUrl": {
           "description": "Storage account endpoint URL.",
           "type": "string"
-        },
-        "location": {
-          "description": "Storage account location.",
-          "type": "string"
         }
       }
     },
     "Resource": {
       "description": "Azure resource.",
+      "required": [
+        "location"
+      ],
       "properties": {
         "id": {
           "description": "Resource Id.",
@@ -548,8 +458,7 @@
         },
         "location": {
           "description": "Resource location.",
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "tags": {
           "description": "Resource tags.",
@@ -586,7 +495,7 @@
           "type": "string"
         },
         "adminUserEnabled": {
-          "description": "The boolean value that indicates whether admin user is enabled.",
+          "description": "The boolean value that indicates whether admin user is enabled. Default value is false.",
           "type": "boolean"
         },
         "storageAccount": {
