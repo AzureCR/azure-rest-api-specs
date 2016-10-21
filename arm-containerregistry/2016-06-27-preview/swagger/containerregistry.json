@@ -21,7 +21,7 @@
           "Operation"
         ],
         "description": "Checks whether the container registry name is available.",
-        "operationId": "Operation_CheckNameAvailability",
+        "operationId": "Registries_CheckNameAvailability",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -342,7 +342,11 @@
           "enum": [
             "Microsoft.ContainerRegistry/registries"
           ],
-          "type": "string"
+          "type": "string",
+          "x-ms-enum": {
+            "name": "ContainerRegistryResourceType",
+            "modelAsString": false
+          }
         }
       }
     },
@@ -351,18 +355,15 @@
       "properties": {
         "nameAvailable": {
           "description": "The boolean value that indicates whether the name is available.",
-          "type": "boolean",
-          "readOnly": true
+          "type": "boolean"
         },
         "reason": {
           "description": "The reason that the container registry name could not be used.",
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "message": {
           "description": "The error message that explains the reason value in more detail.",
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         }
       }
     },
@@ -384,14 +385,9 @@
     "RegistryProperties": {
       "description": "The container registry properties.",
       "required": [
-        "tenantId",
         "storageAccount"
       ],
       "properties": {
-        "tenantId": {
-          "description": "The tenant id for the current user.",
-          "type": "string"
-        },
         "loginServer": {
           "description": "The URL to log into the container registry.",
           "type": "string",
@@ -405,6 +401,7 @@
         },
         "adminUserEnabled": {
           "description": "The boolean value that indicates whether admin user is enabled. Default value is false.",
+          "default": false,
           "type": "boolean"
         },
         "storageAccount": {
@@ -457,7 +454,7 @@
           "readOnly": true
         },
         "location": {
-          "description": "Resource location.",
+          "description": "Resource location. Once the resource has been created, location cannot be updated.",
           "type": "string"
         },
         "tags": {
@@ -490,10 +487,6 @@
     "RegistryPropertiesUpdateParameters": {
       "description": "The parameters for updating container registry properties.",
       "properties": {
-        "tenantId": {
-          "description": "The tenant id for the current user.",
-          "type": "string"
-        },
         "adminUserEnabled": {
           "description": "The boolean value that indicates whether admin user is enabled. Default value is false.",
           "type": "boolean"
@@ -511,8 +504,7 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/Registry"
-          },
-          "readOnly": true
+          }
         }
       }
     },
@@ -521,13 +513,11 @@
       "properties": {
         "username": {
           "description": "Admin username.",
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         },
         "password": {
           "description": "Admin password.",
-          "type": "string",
-          "readOnly": true
+          "type": "string"
         }
       }
     }
