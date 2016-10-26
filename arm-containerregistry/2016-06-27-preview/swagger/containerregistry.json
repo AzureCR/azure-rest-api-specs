@@ -93,7 +93,7 @@
         "tags": [
           "Registries"
         ],
-        "description": "Creates a new container registry with the specified parameters.",
+        "description": "Creates or updates a container registry with the specified parameters. The storage account provided in this operation should be in the same location as the container registry.",
         "operationId": "Registries_CreateOrUpdate",
         "parameters": [
           {
@@ -175,7 +175,7 @@
         "tags": [
           "Registries"
         ],
-        "description": "Updates a container registry with the specified parameters.",
+        "description": "Updates a container registry with the specified parameters. The storage account provided in this operation should be in the same location as the container registry.",
         "operationId": "Registries_Update",
         "parameters": [
           {
