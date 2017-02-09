@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "2016-06-27-preview",
+    "version": "2017-03-01",
     "title": "ContainerRegistryManagementClient"
   },
   "host": "management.azure.com",
@@ -52,10 +52,10 @@
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}": {
       "get": {
         "tags": [
-          "Registries"
+          "RegistriesGA"
         ],
         "description": "Gets the properties of the specified container registry.",
-        "operationId": "Registries_GetProperties",
+        "operationId": "RegistriesGA_GetProperties",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -81,10 +81,10 @@
       },
       "put": {
         "tags": [
-          "Registries"
+          "RegistriesGA"
         ],
         "description": "Creates or updates a container registry with the specified parameters.",
-        "operationId": "Registries_CreateOrUpdate",
+        "operationId": "RegistriesGA_CreateOrUpdate",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -151,10 +151,10 @@
       },
       "patch": {
         "tags": [
-          "Registries"
+          "RegistriesGA"
         ],
         "description": "Updates a container registry with the specified parameters.",
-        "operationId": "Registries_Update",
+        "operationId": "RegistriesGA_Update",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -191,10 +191,10 @@
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries": {
       "get": {
         "tags": [
-          "Registries"
+          "RegistriesGA"
         ],
         "description": "Lists all the available container registries under the specified resource group.",
-        "operationId": "Registries_ListByResourceGroup",
+        "operationId": "RegistriesGA_ListByResourceGroup",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -222,10 +222,10 @@
     "/subscriptions/{subscriptionId}/providers/Microsoft.ContainerRegistry/registries": {
       "get": {
         "tags": [
-          "Registries"
+          "RegistriesGA"
         ],
         "description": "Lists all the available container registries under the specified subscription.",
-        "operationId": "Registries_List",
+        "operationId": "RegistriesGA_List",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -247,13 +247,13 @@
         }
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/getCredentials": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/listKeys": {
       "post": {
         "tags": [
-          "Registries"
+          "RegistriesGA"
         ],
         "description": "Gets the administrator login credentials for the specified container registry.",
-        "operationId": "Registries_GetCredentials",
+        "operationId": "RegistriesGA_ListKeys",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -272,19 +272,22 @@
           "200": {
             "description": "The request was successful; the request was well-formed and received properly.",
             "schema": {
-              "$ref": "#/definitions/RegistryCredentials"
+              "$ref": "#/definitions/RegistryListKeysResult"
             }
           }
+        },
+        "x-ms-pageable": {
+          "nextLinkName": "nextLink"
         }
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/regenerateCredentials": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/regenerateKey": {
       "post": {
         "tags": [
-          "Registries"
+          "RegistriesGA"
         ],
         "description": "Regenerates the administrator login credentials for the specified container registry.",
-        "operationId": "Registries_RegenerateCredentials",
+        "operationId": "RegistriesGA_RegenerateKey",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -297,13 +300,22 @@
           },
           {
             "$ref": "#/parameters/RegistryNameParameter"
+          },
+          {
+            "name": "regenerateKey",
+            "in": "body",
+            "description": "The regenerate Key parameters",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegistryRegenerateKeyParameters"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "The request was successful; the request was well-formed and received properly.",
             "schema": {
-              "$ref": "#/definitions/RegistryCredentials"
+              "$ref": "#/definitions/RegistryListKeysResult"
             }
           }
         }
@@ -353,17 +365,39 @@
       }
     },
     "Registry": {
-      "description": "An object that represents a container registry.",
       "allOf": [
         {
           "$ref": "#/definitions/Resource"
         }
       ],
       "properties": {
+        "sku": {
+          "$ref": "#/definitions/Sku"
+        },
         "properties": {
           "$ref": "#/definitions/RegistryProperties",
           "description": "The properties of the container registry.",
           "x-ms-client-flatten": true
+        }
+      }
+    },
+    "Sku": {
+      "properties": {
+        "name": {
+          "enum": [
+            "Basic",
+            "Standard",
+            "Premium"
+          ],
+          "type": "string"
+        },
+        "tier": {
+          "enum": [
+            "Basic",
+            "Standard",
+            "Premium"
+          ],
+          "type": "string"
         }
       }
     },
@@ -458,15 +492,36 @@
         }
       }
     },
-    "RegistryCredentials": {
+    "RegistryListKeysResult": {
+      "properties": {
+        "keys": {
+          "description": "The list of storage account keys",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RegistryKey"
+          }
+        }
+      }
+    },
+    "RegistryKey": {
       "description": "The result of a request to get the administrator login credentials for a container registry.",
       "properties": {
-        "username": {
-          "description": "The administrator username.",
+        "keyName": {
+          "description": "Name of the key.",
           "type": "string"
         },
-        "password": {
-          "description": "The administrator password.",
+        "value": {
+          "description": "Value of the key",
+          "type": "string"
+        }
+      }
+    },
+    "RegistryRegenerateKeyParameters": {
+      "required": [
+        "keyName"
+      ],
+      "properties": {
+        "keyName": {
           "type": "string"
         }
       }
