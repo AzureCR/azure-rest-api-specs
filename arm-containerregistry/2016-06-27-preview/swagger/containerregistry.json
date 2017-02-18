@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "2016-06-27-preview",
+    "version": "2017-03-01",
     "title": "ContainerRegistryManagementClient"
   },
   "host": "management.azure.com",
@@ -247,13 +247,13 @@
         }
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/getCredentials": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/listCredentials": {
       "post": {
         "tags": [
           "Registries"
         ],
-        "description": "Gets the administrator login credentials for the specified container registry.",
-        "operationId": "Registries_GetCredentials",
+        "description": "Lists the login credentials for the specified container registry.",
+        "operationId": "Registries_ListCredentials",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -270,21 +270,21 @@
         ],
         "responses": {
           "200": {
-            "description": "The request was successful; the request was well-formed and received properly.",
+            "description": "The request was successful; the list of credentials retrieved and returned successfully.",
             "schema": {
-              "$ref": "#/definitions/RegistryCredentials"
+              "$ref": "#/definitions/RegistryListCredentialsResult"
             }
           }
         }
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/regenerateCredentials": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/regenerateCredential": {
       "post": {
         "tags": [
           "Registries"
         ],
-        "description": "Regenerates the administrator login credentials for the specified container registry.",
-        "operationId": "Registries_RegenerateCredentials",
+        "description": "Regenerates one of the login credentials for the specified container registry.",
+        "operationId": "Registries_RegenerateCredential",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -297,13 +297,22 @@
           },
           {
             "$ref": "#/parameters/RegistryNameParameter"
+          },
+          {
+            "name": "regenerateCredential",
+            "in": "body",
+            "description": "Specifies name of the credential which should be regenerated -- credential1 or credential2.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegenerateCredentialParameters"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "The request was successful; the request was well-formed and received properly.",
+            "description": "The request was successful; the specified credential regenerated successfully.",
             "schema": {
-              "$ref": "#/definitions/RegistryCredentials"
+              "$ref": "#/definitions/RegistryListCredentialsResult"
             }
           }
         }
@@ -354,16 +363,50 @@
     },
     "Registry": {
       "description": "An object that represents a container registry.",
+      "required": [
+        "sku"
+      ],
       "allOf": [
         {
           "$ref": "#/definitions/Resource"
         }
       ],
       "properties": {
+        "sku": {
+          "$ref": "#/definitions/Sku",
+          "description": "The Sku of the container registry."
+        },
         "properties": {
           "$ref": "#/definitions/RegistryProperties",
           "description": "The properties of the container registry.",
           "x-ms-client-flatten": true
+        }
+      }
+    },
+    "Sku": {
+      "description": "The Sku of the container registry.",
+      "properties": {
+        "name": {
+          "description": "Name of the registry Sku. Required for registry creation.",
+          "enum": [
+            "Basic"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "SkuName",
+            "modelAsString": false
+          }
+        },
+        "tier": {
+          "description": "Sku tier based on the Sku name.",
+          "enum": [
+            "Basic"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "SkuTier",
+            "modelAsString": false
+          }
         }
       }
     },
@@ -458,15 +501,43 @@
         }
       }
     },
-    "RegistryCredentials": {
-      "description": "The result of a request to get the administrator login credentials for a container registry.",
+    "RegistryListCredentialsResult": {
+      "description": "The response from the ListCredentials operation.",
       "properties": {
+        "credentials": {
+          "description": "The list of login credentials for a container registry.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RegistryCredential"
+          }
+        }
+      }
+    },
+    "RegistryCredential": {
+      "description": "The login credential for the container registry.",
+      "properties": {
+        "credentialName": {
+          "description": "Name of the credential.",
+          "type": "string"
+        },
         "username": {
-          "description": "The administrator username.",
+          "description": "The username used to login to a container registry.",
           "type": "string"
         },
         "password": {
-          "description": "The administrator password.",
+          "description": "The password used to login to a container registry.",
+          "type": "string"
+        }
+      }
+    },
+    "RegenerateCredentialParameters": {
+      "description": "The parameters used to regenerate the login credential.",
+      "required": [
+        "credentialName"
+      ],
+      "properties": {
+        "credentialName": {
+          "description": "Specifies name of the credential which should be regenerated -- credential1 or credential2.",
           "type": "string"
         }
       }
