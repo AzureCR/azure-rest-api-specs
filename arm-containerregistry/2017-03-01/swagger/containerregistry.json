@@ -118,7 +118,8 @@
           "202": {
             "description": "The request was successful; the operation will complete asynchronously."
           }
-        }
+        },
+        "x-ms-long-running-operation": true
       },
       "delete": {
         "tags": [
@@ -394,7 +395,7 @@
           "type": "string",
           "x-ms-enum": {
             "name": "SkuName",
-            "modelAsString": false
+            "modelAsString": true
           }
         },
         "tier": {
@@ -405,7 +406,7 @@
           "type": "string",
           "x-ms-enum": {
             "name": "SkuTier",
-            "modelAsString": false
+            "modelAsString": true
           }
         }
       }
