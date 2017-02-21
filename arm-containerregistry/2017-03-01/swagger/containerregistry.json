@@ -193,7 +193,7 @@
         "tags": [
           "Registries"
         ],
-        "description": "Lists all the available container registries under the specified resource group.",
+        "description": "Lists all the container registries under the specified resource group.",
         "operationId": "Registries_ListByResourceGroup",
         "parameters": [
           {
@@ -224,7 +224,7 @@
         "tags": [
           "Registries"
         ],
-        "description": "Lists all the available container registries under the specified subscription.",
+        "description": "Lists all the container registries under the specified subscription.",
         "operationId": "Registries_List",
         "parameters": [
           {
@@ -301,7 +301,7 @@
           {
             "name": "regenerateCredential",
             "in": "body",
-            "description": "Specifies name of the credential which should be regenerated -- credential1 or credential2.",
+            "description": "Specifies name of the credential which should be regenerated -- Credential1 or Credential2.",
             "required": true,
             "schema": {
               "$ref": "#/definitions/RegenerateCredentialParameters"
@@ -518,7 +518,15 @@
       "properties": {
         "credentialName": {
           "description": "Name of the credential.",
-          "type": "string"
+          "enum": [
+            "Credential1",
+            "Credential2"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "CredentialName",
+            "modelAsString": false
+          }
         },
         "username": {
           "description": "The username used to login to a container registry.",
@@ -537,8 +545,16 @@
       ],
       "properties": {
         "credentialName": {
-          "description": "Specifies name of the credential which should be regenerated -- credential1 or credential2.",
-          "type": "string"
+          "description": "Specifies name of the credential which should be regenerated -- Credential1 or Credential2.",
+          "enum": [
+            "Credential1",
+            "Credential2"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "CredentialName",
+            "modelAsString": false
+          }
         }
       }
     },
