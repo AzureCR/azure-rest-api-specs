@@ -1,0 +1,10 @@
+{
+  "info": {
+    "title": "ContainerRegistryManagementClient",
+    "description": "Composite swagger for Azure Container Registry management client."
+  },
+  "documents": [
+    "./2017-03-01/swagger/containerregistry.json",
+    "./2017-06-01-preview/swagger/containerregistry.json"
+  ]
+}
