@@ -517,13 +517,25 @@
       ],
       "properties": {
         "name": {
-          "description": "The SKU name of the the container registry. Required for registry creation. Allowed value: Basic.",
-          "type": "string"
+          "description": "The SKU name of the the container registry. Required for registry creation.",
+          "enum": [
+            "Basic",
+            "Standard",
+            "Premium"
+          ],
+          "type": "string",
+          "readOnly": true,
+          "x-ms-enum": {
+            "name": "SkuName",
+            "modelAsString": true
+          }
         },
         "tier": {
           "description": "The SKU tier based on the SKU name.",
           "enum": [
-            "Basic"
+            "Basic",
+            "Standard",
+            "Premium"
           ],
           "type": "string",
           "readOnly": true,
