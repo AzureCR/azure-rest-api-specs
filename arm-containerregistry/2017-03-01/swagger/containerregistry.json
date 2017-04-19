@@ -624,9 +624,6 @@
     },
     "RegistryPropertiesCreateParameters": {
       "description": "The parameters for creating the properties of a container registry.",
-      "required": [
-        "storageAccount"
-      ],
       "properties": {
         "adminUserEnabled": {
           "description": "The value that indicates whether the admin user is enabled. This value is false by default.",
