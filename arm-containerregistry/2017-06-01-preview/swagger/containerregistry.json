@@ -15,6 +15,65 @@
     "application/json"
   ],
   "paths": {
+    "/subscriptions/{subscriptionId}/providers/Microsoft.ContainerRegistry/checkNameAvailability": {
+      "post": {
+        "tags": [
+          "Operation"
+        ],
+        "description": "Checks whether the container registry name is available for use. The name must contain only alphanumeric characters, be globally unique, and between 5 and 50 characters in length.",
+        "operationId": "Registries_CheckNameAvailability",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionIdParameter"
+          },
+          {
+            "name": "registryNameCheckRequest",
+            "in": "body",
+            "description": "The object containing information for the availability request.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegistryNameCheckRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful; the request was well-formed and received properly.",
+            "schema": {
+              "$ref": "#/definitions/RegistryNameStatus"
+            }
+          }
+        }
+      }
+    },
+    "/providers/Microsoft.ContainerRegistry/operations": {
+      "get": {
+        "tags": [
+          "Operation"
+        ],
+        "description": "Lists all of the available Azure Container Registry REST API operations.",
+        "operationId": "Operations_List",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful; the request was well-formed and received properly.",
+            "schema": {
+              "$ref": "#/definitions/OperationListResult"
+            }
+          }
+        },
+        "x-ms-pageable": {
+          "nextLinkName": "nextLink"
+        }
+      }
+    },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}": {
       "get": {
         "tags": [
@@ -663,6 +722,100 @@
     }
   },
   "definitions": {
+    "RegistryNameCheckRequest": {
+      "description": "A request to check whether a container registry name is available.",
+      "required": [
+        "name",
+        "type"
+      ],
+      "properties": {
+        "name": {
+          "description": "The name of the container registry.",
+          "maxLength": 50,
+          "minLength": 5,
+          "pattern": "^[a-zA-Z0-9]*$",
+          "type": "string"
+        },
+        "type": {
+          "description": "The resource type of the container registry. This field must be set to \"Microsoft.ContainerRegistry/registries\".",
+          "enum": [
+            "Microsoft.ContainerRegistry/registries"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "ContainerRegistryResourceType",
+            "modelAsString": false
+          }
+        }
+      }
+    },
+    "RegistryNameStatus": {
+      "description": "The result of a request to check the availability of a container registry name.",
+      "properties": {
+        "nameAvailable": {
+          "description": "The value that indicates whether the name is available.",
+          "type": "boolean"
+        },
+        "reason": {
+          "description": "If any, the reason that the name is not available.",
+          "type": "string"
+        },
+        "message": {
+          "description": "If any, the error message that provides more detail for the reason that the name is not available.",
+          "type": "string"
+        }
+      }
+    },
+    "OperationListResult": {
+      "description": "The result of a request to list container registry operations.",
+      "properties": {
+        "value": {
+          "description": "The list of container registry operations. Since this list may be incomplete, the nextLink field should be used to request the next list of operations.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OperationDefinition"
+          }
+        },
+        "nextLink": {
+          "description": "The URI that can be used to request the next list of container registry operations.",
+          "type": "string"
+        }
+      }
+    },
+    "OperationDefinition": {
+      "description": "The definition of a container registry operation.",
+      "properties": {
+        "name": {
+          "description": "Operation name: {provider}/{resource}/{operation}.",
+          "type": "string"
+        },
+        "display": {
+          "$ref": "#/definitions/OperationDisplayDefinition",
+          "description": "The display information for the container registry operation."
+        }
+      }
+    },
+    "OperationDisplayDefinition": {
+      "description": "The display information for a container registry operation.",
+      "properties": {
+        "provider": {
+          "description": "The resource provider name: Microsoft.ContainerRegistry.",
+          "type": "string"
+        },
+        "resource": {
+          "description": "The resource on which the operation is performed.",
+          "type": "string"
+        },
+        "operation": {
+          "description": "The operation that users can perform.",
+          "type": "string"
+        },
+        "description": {
+          "description": "The description for the operation.",
+          "type": "string"
+        }
+      }
+    },
     "Registry": {
       "description": "An object that represents a container registry.",
       "required": [
