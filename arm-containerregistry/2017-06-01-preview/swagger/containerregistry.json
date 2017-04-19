@@ -388,6 +388,212 @@
         }
       }
     },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/replications/{replicationName}": {
+      "get": {
+        "tags": [
+          "Replications"
+        ],
+        "description": "Gets the properties of the specified replication.",
+        "operationId": "Replications_Get",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionIdParameter"
+          },
+          {
+            "$ref": "#/parameters/ResourceGroupParameter"
+          },
+          {
+            "$ref": "#/parameters/RegistryNameParameter"
+          },
+          {
+            "name": "replicationName",
+            "in": "path",
+            "description": "The replication name.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful; the request was well-formed and received properly.",
+            "schema": {
+              "$ref": "#/definitions/Replication"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Replications"
+        ],
+        "description": "Creates a replication for a container registry with the specified parameters.",
+        "operationId": "Replications_Create",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionIdParameter"
+          },
+          {
+            "$ref": "#/parameters/ResourceGroupParameter"
+          },
+          {
+            "$ref": "#/parameters/RegistryNameParameter"
+          },
+          {
+            "name": "replicationName",
+            "in": "path",
+            "description": "The replication name.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "replication",
+            "in": "body",
+            "description": "The parameters for creating a replication.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Replication"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful; the request was well-formed and received properly.",
+            "schema": {
+              "$ref": "#/definitions/Replication"
+            }
+          },
+          "202": {
+            "description": "The request was successful; the operation will complete asynchronously."
+          }
+        },
+        "x-ms-long-running-operation": true
+      },
+      "delete": {
+        "tags": [
+          "Replications"
+        ],
+        "description": "Deletes a replication from a container registry.",
+        "operationId": "Replications_Delete",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionIdParameter"
+          },
+          {
+            "$ref": "#/parameters/ResourceGroupParameter"
+          },
+          {
+            "$ref": "#/parameters/RegistryNameParameter"
+          },
+          {
+            "name": "replicationName",
+            "in": "path",
+            "description": "The replication name.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful; the request was well-formed and received properly."
+          },
+          "202": {
+            "description": "The request was successful; the operation will complete asynchronously."
+          },
+          "204": {
+            "description": "The replication does not exist in the subscription."
+          }
+        },
+        "x-ms-long-running-operation": true
+      },
+      "patch": {
+        "tags": [
+          "Replications"
+        ],
+        "description": "Updates a replication with the specified parameters.",
+        "operationId": "Replications_Update",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionIdParameter"
+          },
+          {
+            "$ref": "#/parameters/ResourceGroupParameter"
+          },
+          {
+            "$ref": "#/parameters/RegistryNameParameter"
+          },
+          {
+            "name": "replicationName",
+            "in": "path",
+            "description": "The replication name.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "replication",
+            "in": "body",
+            "description": "The parameters for updating a replication.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Replication"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful; the request was well-formed and received properly.",
+            "schema": {
+              "$ref": "#/definitions/Replication"
+            }
+          }
+        }
+      }
+    },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/replications": {
+      "get": {
+        "tags": [
+          "Replications"
+        ],
+        "description": "Lists all the replications for the specified container registry.",
+        "operationId": "Replications_List",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionIdParameter"
+          },
+          {
+            "$ref": "#/parameters/ResourceGroupParameter"
+          },
+          {
+            "$ref": "#/parameters/RegistryNameParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful; the request was well-formed and received properly.",
+            "schema": {
+              "$ref": "#/definitions/ReplicationListResult"
+            }
+          }
+        },
+        "x-ms-pageable": {
+          "nextLinkName": "nextLink"
+        }
+      }
+    },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/webhooks/{webhookName}": {
       "get": {
         "tags": [
@@ -1080,6 +1286,63 @@
             "name": "PasswordName",
             "modelAsString": false
           }
+        }
+      }
+    },
+    "Replication": {
+      "description": "An object that represents a replication for a container registry.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/Resource"
+        }
+      ],
+      "properties": {
+        "properties": {
+          "$ref": "#/definitions/ReplicationProperties",
+          "description": "The properties of the replication.",
+          "x-ms-client-flatten": true
+        }
+      }
+    },
+    "ReplicationProperties": {
+      "description": "The properties of a replication.",
+      "properties": {
+        "provisioningState": {
+          "description": "The status of the replication at the time the operation was called.",
+          "enum": [
+            "Creating",
+            "Succeeded"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "ProvisioningState",
+            "modelAsString": false
+          }
+        },
+        "endpoint": {
+          "description": "The endpoint URI of the replication.",
+          "type": "string",
+          "readOnly": true
+        },
+        "isEnabled": {
+          "description": "The value that indicates whether the replication is enabled.",
+          "type": "boolean"
+        }
+      }
+    },
+    "ReplicationListResult": {
+      "description": "The result of a request to list replications for a container registry.",
+      "properties": {
+        "value": {
+          "description": "The list of replications. Since this list may be incomplete, the nextLink field should be used to request the next list of replications.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Replication"
+          }
+        },
+        "nextLink": {
+          "description": "The URI that can be used to request the next list of replications.",
+          "type": "string"
         }
       }
     },
