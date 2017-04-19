@@ -20,7 +20,7 @@
         "tags": [
           "Operation"
         ],
-        "description": "Checks whether the container registry name is available for use. The name must contain only alphanumeric characters, be globally unique, and between 5 and 60 characters in length.",
+        "description": "Checks whether the container registry name is available for use. The name must contain only alphanumeric characters, be globally unique, and between 5 and 50 characters in length.",
         "operationId": "Registries_CheckNameAvailability",
         "parameters": [
           {
@@ -188,6 +188,9 @@
           "200": {
             "description": "The request was successful; the request was well-formed and received properly."
           },
+          "202": {
+            "description": "The request was successful; the operation will complete asynchronously."
+          },
           "204": {
             "description": "The container registry does not exist in the subscription."
           }
@@ -196,7 +199,8 @@
           "RegistryDelete": {
             "$ref": "../examples/RegistryDelete.json"
           }
-        }
+        },
+        "x-ms-long-running-operation": true
       },
       "patch": {
         "tags": [
@@ -517,13 +521,25 @@
       ],
       "properties": {
         "name": {
-          "description": "The SKU name of the the container registry. Required for registry creation. Allowed value: Basic.",
-          "type": "string"
+          "description": "The SKU name of the the container registry. Required for registry creation.",
+          "enum": [
+            "Basic",
+            "Standard",
+            "Premium"
+          ],
+          "type": "string",
+          "readOnly": true,
+          "x-ms-enum": {
+            "name": "SkuName",
+            "modelAsString": true
+          }
         },
         "tier": {
           "description": "The SKU tier based on the SKU name.",
           "enum": [
-            "Basic"
+            "Basic",
+            "Standard",
+            "Premium"
           ],
           "type": "string",
           "readOnly": true,
@@ -612,9 +628,6 @@
     },
     "RegistryPropertiesCreateParameters": {
       "description": "The parameters for creating the properties of a container registry.",
-      "required": [
-        "storageAccount"
-      ],
       "properties": {
         "adminUserEnabled": {
           "description": "The value that indicates whether the admin user is enabled. This value is false by default.",
