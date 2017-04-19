@@ -409,11 +409,7 @@
             "$ref": "#/parameters/RegistryNameParameter"
           },
           {
-            "name": "replicationName",
-            "in": "path",
-            "description": "The replication name.",
-            "required": true,
-            "type": "string"
+            "$ref": "#/parameters/ReplicationNameParameter"
           }
         ],
         "responses": {
@@ -445,11 +441,7 @@
             "$ref": "#/parameters/RegistryNameParameter"
           },
           {
-            "name": "replicationName",
-            "in": "path",
-            "description": "The replication name.",
-            "required": true,
-            "type": "string"
+            "$ref": "#/parameters/ReplicationNameParameter"
           },
           {
             "name": "replication",
@@ -494,11 +486,7 @@
             "$ref": "#/parameters/RegistryNameParameter"
           },
           {
-            "name": "replicationName",
-            "in": "path",
-            "description": "The replication name.",
-            "required": true,
-            "type": "string"
+            "$ref": "#/parameters/ReplicationNameParameter"
           }
         ],
         "responses": {
@@ -534,11 +522,7 @@
             "$ref": "#/parameters/RegistryNameParameter"
           },
           {
-            "name": "replicationName",
-            "in": "path",
-            "description": "The replication name.",
-            "required": true,
-            "type": "string"
+            "$ref": "#/parameters/ReplicationNameParameter"
           },
           {
             "name": "replication",
@@ -1726,6 +1710,17 @@
       "name": "webhookName",
       "in": "path",
       "description": "The name of the webhook.",
+      "required": true,
+      "type": "string",
+      "maxLength": 50,
+      "minLength": 5,
+      "pattern": "^[a-zA-Z0-9]*$",
+      "x-ms-parameter-location": "method"
+    },
+    "ReplicationNameParameter": {
+      "name": "replicationName",
+      "in": "path",
+      "description": "The name of the replication.",
       "required": true,
       "type": "string",
       "maxLength": 50,
