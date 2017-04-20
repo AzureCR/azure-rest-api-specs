@@ -10,7 +10,7 @@
                 "key": "value"
             },
             "properties": {
-                "configuration": {
+                "callbackConfig": {
                     "serviceUri": "http://myservice.com",
                     "customHeaders": {
                         "Authorization": "Basic 000000000000000000000000000000000000000000000000000"
@@ -18,7 +18,7 @@
                 },
                 "isEnabled": true,
                 "scope": "myRepository",
-                "events": [
+                "actions": [
                     "push",
                     "pull"
                 ]
@@ -38,7 +38,7 @@
                 "properties": {
                     "isEnabled": true,
                     "scope": "myRepository",
-                    "events": [
+                    "actions": [
                         "push",
                         "pull"
                     ]

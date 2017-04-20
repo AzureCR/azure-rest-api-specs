@@ -816,13 +816,13 @@
         }
       }
     },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/webhooks/{webhookName}/getConfiguration": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/webhooks/{webhookName}/getCallbackConfig": {
       "post": {
         "tags": [
           "Webhooks"
         ],
         "description": "Gets the configuration of service URI and custom headers for the webhook.",
-        "operationId": "Webhooks_GetConfiguration",
+        "operationId": "Webhooks_GetCallbackConfig",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -844,13 +844,13 @@
           "200": {
             "description": "The request was successful; the request was well-formed and received properly.",
             "schema": {
-              "$ref": "#/definitions/Configuration"
+              "$ref": "#/definitions/CallbackConfig"
             }
           }
         },
         "x-ms-examples": {
-          "WebhookGetConfiguration": {
-            "$ref": "../examples/WebhookGetConfiguration.json"
+          "WebhookGetCallbackConfig": {
+            "$ref": "../examples/WebhookGetCallbackConfig.json"
           }
         }
       }
@@ -1100,14 +1100,21 @@
     "RegistryCreateParameters": {
       "description": "The parameters for creating a container registry.",
       "required": [
+        "location",
         "sku"
       ],
-      "allOf": [
-        {
-          "$ref": "#/definitions/Resource"
-        }
-      ],
       "properties": {
+        "tags": {
+          "description": "The tags for the container registry.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "location": {
+          "description": "The location of the container registry. This cannot be changed after the resource is created.",
+          "type": "string"
+        },
         "sku": {
           "$ref": "#/definitions/Sku",
           "description": "The SKU of the container registry."
@@ -1287,16 +1294,6 @@
             "name": "ProvisioningState",
             "modelAsString": false
           }
-        },
-        "endpoint": {
-          "description": "The endpoint URI of the replication.",
-          "type": "string",
-          "readOnly": true
-        },
-        "isEnabled": {
-          "description": "The value that indicates whether the replication is enabled.",
-          "default": true,
-          "type": "boolean"
         }
       }
     },
@@ -1343,32 +1340,32 @@
           "description": "The scope of repositories where the event can be triggered.",
           "type": "string"
         },
-        "events": {
-          "description": "The list of events that trigger the webhook to post notifications.",
+        "actions": {
+          "description": "The list of actions that trigger the webhook to post notifications.",
           "type": "array",
           "items": {
-            "enum": [
-              "push",
-              "pull",
-              "delete"
-            ],
-            "type": "string",
-            "x-ms-enum": {
-              "name": "WebhookEvent",
-              "modelAsString": true
-            }
+            "type": "string"
           }
         }
       }
     },
     "WebhookCreateParameters": {
       "description": "The parameters for creating a webhook.",
-      "allOf": [
-        {
-          "$ref": "#/definitions/Resource"
-        }
+      "required": [
+        "location"
       ],
       "properties": {
+        "tags": {
+          "description": "The tags for the webhook.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "location": {
+          "description": "The location of the webhook. This cannot be changed after the resource is created.",
+          "type": "string"
+        },
         "properties": {
           "$ref": "#/definitions/WebhookPropertiesCreateParameters",
           "description": "The properties that the webhook will be created with.",
@@ -1379,11 +1376,11 @@
     "WebhookPropertiesCreateParameters": {
       "description": "The parameters for creating the properties of a webhook.",
       "required": [
-        "configuration"
+        "callbackConfig"
       ],
       "properties": {
-        "configuration": {
-          "$ref": "#/definitions/Configuration",
+        "callbackConfig": {
+          "$ref": "#/definitions/CallbackConfig",
           "description": "The configuration of service URI and custom headers for the webhook."
         },
         "isEnabled": {
@@ -1395,25 +1392,16 @@
           "description": "The scope of repositories where the event can be triggered.",
           "type": "string"
         },
-        "events": {
-          "description": "The list of events that trigger the webhook to post notifications.",
+        "actions": {
+          "description": "The list of actions that trigger the webhook to post notifications.",
           "type": "array",
           "items": {
-            "enum": [
-              "push",
-              "pull",
-              "delete"
-            ],
-            "type": "string",
-            "x-ms-enum": {
-              "name": "WebhookEvent",
-              "modelAsString": true
-            }
+            "type": "string"
           }
         }
       }
     },
-    "Configuration": {
+    "CallbackConfig": {
       "description": "The configuration of service URI and custom headers for the webhook.",
       "required": [
         "serviceUri"
@@ -1452,11 +1440,11 @@
     "WebhookPropertiesUpdateParameters": {
       "description": "The parameters for updating the properties of a webhook.",
       "required": [
-        "configuration"
+        "callbackConfig"
       ],
       "properties": {
-        "configuration": {
-          "$ref": "#/definitions/Configuration",
+        "callbackConfig": {
+          "$ref": "#/definitions/CallbackConfig",
           "description": "The configuration of service URI and custom headers for the webhook."
         },
         "isEnabled": {
@@ -1467,20 +1455,11 @@
           "description": "The scope of repositories where the event can be triggered.",
           "type": "string"
         },
-        "events": {
-          "description": "The list of events that trigger the webhook to post notifications.",
+        "actions": {
+          "description": "The list of actions that trigger the webhook to post notifications.",
           "type": "array",
           "items": {
-            "enum": [
-              "push",
-              "pull",
-              "delete"
-            ],
-            "type": "string",
-            "x-ms-enum": {
-              "name": "WebhookEvent",
-              "modelAsString": true
-            }
+            "type": "string"
           }
         }
       }

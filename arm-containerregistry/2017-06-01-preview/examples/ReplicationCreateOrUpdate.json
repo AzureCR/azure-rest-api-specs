@@ -9,9 +9,6 @@
             "location": "eastus",
             "tags": {
                 "key": "value"
-            },
-            "properties": {
-                "isEnabled": true
             }
         }
     },
@@ -26,9 +23,7 @@
                     "key": "value"
                 },
                 "properties": {
-                    "provisioningState": "Succeeded",
-                    "endpoint": "myregistry-eastus.azurecr.io",
-                    "isEnabled": true
+                    "provisioningState": "Succeeded"
                 }
             }
         },

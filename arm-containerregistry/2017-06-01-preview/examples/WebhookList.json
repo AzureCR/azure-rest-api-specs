@@ -20,7 +20,7 @@
                         "properties": {
                             "isEnabled": true,
                             "scope": "myRepository",
-                            "events": [
+                            "actions": [
                                 "push",
                                 "pull"
                             ]

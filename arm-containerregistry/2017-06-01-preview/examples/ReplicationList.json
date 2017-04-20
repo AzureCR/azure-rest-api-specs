@@ -18,9 +18,7 @@
                             "key": "value"
                         },
                         "properties": {
-                            "provisioningState": "Succeeded",
-                            "endpoint": "myregistry-eastus.azurecr.io",
-                            "isEnabled": true
+                            "provisioningState": "Succeeded"
                         }
                     }
                 ]
