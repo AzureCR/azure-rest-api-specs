@@ -46,6 +46,14 @@
               "$ref": "#/definitions/RegistryNameStatus"
             }
           }
+        },
+        "x-ms-examples": {
+          "RegistryCheckNameAvailable": {
+            "$ref": "../examples/RegistryCheckNameAvailable.json"
+          },
+          "RegistryCheckNameNotAvailable": {
+            "$ref": "../examples/RegistryCheckNameNotAvailable.json"
+          }
         }
       }
     },
@@ -1123,6 +1131,7 @@
       "properties": {
         "adminUserEnabled": {
           "description": "The value that indicates whether the admin user is enabled.",
+          "default": false,
           "type": "boolean"
         },
         "storageAccount": {
@@ -1157,6 +1166,10 @@
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "sku": {
+          "$ref": "#/definitions/Sku",
+          "description": "The SKU of the container registry."
         },
         "properties": {
           "$ref": "#/definitions/RegistryPropertiesUpdateParameters",
@@ -1391,6 +1404,7 @@
         },
         "isEnabled": {
           "description": "The value that indicates whether the webhook is enabled.",
+          "default": true,
           "type": "boolean"
         },
         "scope": {
@@ -1401,7 +1415,16 @@
           "description": "The list of events that trigger the webhook to post notifications.",
           "type": "array",
           "items": {
-            "type": "string"
+            "enum": [
+              "push",
+              "pull",
+              "delete"
+            ],
+            "type": "string",
+            "x-ms-enum": {
+              "name": "WebhookEvent",
+              "modelAsString": true
+            }
           }
         }
       }
@@ -1464,7 +1487,16 @@
           "description": "The list of events that trigger the webhook to post notifications.",
           "type": "array",
           "items": {
-            "type": "string"
+            "enum": [
+              "push",
+              "pull",
+              "delete"
+            ],
+            "type": "string",
+            "x-ms-enum": {
+              "name": "WebhookEvent",
+              "modelAsString": true
+            }
           }
         }
       }
@@ -1488,7 +1520,7 @@
     "EventListResult": {
       "description": "The result of a request to list events for a webhook.",
       "properties": {
-        "events": {
+        "value": {
           "description": "The list of events. Since this list may be incomplete, the nextLink field should be used to request the next list of events.",
           "type": "array",
           "items": {
