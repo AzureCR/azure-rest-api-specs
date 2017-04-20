@@ -860,7 +860,7 @@
         "tags": [
           "Webhooks"
         ],
-        "description": "Lists events for the specified webhook.",
+        "description": "Lists the most recent ten events for the specified webhook.",
         "operationId": "Webhooks_ListEvents",
         "parameters": [
           {
@@ -877,6 +877,13 @@
           },
           {
             "$ref": "#/parameters/WebhookNameParameter"
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "Optional OData filter.",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
