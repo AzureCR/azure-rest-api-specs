@@ -431,7 +431,7 @@
           "Replications"
         ],
         "description": "Creates a replication for a container registry with the specified parameters.",
-        "operationId": "Replications_Create",
+        "operationId": "Replications_CreateOrUpdate",
         "parameters": [
           {
             "$ref": "#/parameters/ApiVersionParameter"
@@ -470,8 +470,8 @@
           }
         },
         "x-ms-examples": {
-          "ReplicationCreate": {
-            "$ref": "../examples/ReplicationCreate.json"
+          "ReplicationCreateOrUpdate": {
+            "$ref": "../examples/ReplicationCreateOrUpdate.json"
           }
         },
         "x-ms-long-running-operation": true
@@ -516,52 +516,6 @@
           }
         },
         "x-ms-long-running-operation": true
-      },
-      "patch": {
-        "tags": [
-          "Replications"
-        ],
-        "description": "Updates a replication with the specified parameters.",
-        "operationId": "Replications_Update",
-        "parameters": [
-          {
-            "$ref": "#/parameters/ApiVersionParameter"
-          },
-          {
-            "$ref": "#/parameters/SubscriptionIdParameter"
-          },
-          {
-            "$ref": "#/parameters/ResourceGroupParameter"
-          },
-          {
-            "$ref": "#/parameters/RegistryNameParameter"
-          },
-          {
-            "$ref": "#/parameters/ReplicationNameParameter"
-          },
-          {
-            "name": "replication",
-            "in": "body",
-            "description": "The parameters for updating a replication.",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Replication"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The request was successful; the request was well-formed and received properly.",
-            "schema": {
-              "$ref": "#/definitions/Replication"
-            }
-          }
-        },
-        "x-ms-examples": {
-          "ReplicationUpdate": {
-            "$ref": "../examples/ReplicationUpdate.json"
-          }
-        }
       }
     },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ContainerRegistry/registries/{registryName}/replications": {
