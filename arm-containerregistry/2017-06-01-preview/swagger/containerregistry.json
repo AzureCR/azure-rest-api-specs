@@ -1067,7 +1067,6 @@
             "Premium"
           ],
           "type": "string",
-          "readOnly": true,
           "x-ms-enum": {
             "name": "SkuName",
             "modelAsString": true

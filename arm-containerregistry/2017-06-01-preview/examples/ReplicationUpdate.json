@@ -6,7 +6,6 @@
         "registryName": "myRegistry",
         "replicationName": "myReplication",
         "replication": {
-            "location": "eastus",
             "tags": {
                 "key": "value"
             },
